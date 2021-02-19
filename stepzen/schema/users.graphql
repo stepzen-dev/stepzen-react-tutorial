@@ -1,0 +1,20 @@
+interface User {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  phone: String!
+  website: String!
+}
+
+type Query {
+  getUsers: [User]
+}
+
+type UserBackend implements User {}
+
+type Query {
+  getUsersBackend: [UserBackend]
+    @supplies(query:"getUsers")
+    @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
+}
