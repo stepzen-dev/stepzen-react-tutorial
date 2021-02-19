@@ -69,7 +69,7 @@ type Query {
 type UserBackend implements User {}
 
 type Query {
-  getUsersBackend(unused: String!): [UserBackend]
+  getUsersBackend: [UserBackend]
     @supplies(
       query:"getUsers"
     )
