@@ -10,20 +10,21 @@ export const GET_USERS_QUERY = gql`
   }
 `
 
-const Users = () => {
-    const { data, loading } = useQuery(GET_USERS_QUERY)
-    const users = data?.getUsers
+export default function Users() {
+  const { data, loading, error } = useQuery(GET_USERS_QUERY)
+  const users = data?.getUsers
   
-    return (
-      <>
-        <h2>Users</h2>
-        {loading ? (<div>Loading</div>) : (
-          <pre>
-            {JSON.stringify(users, null, "  ")}
-          </pre>
-        )}
-      </>
-    )
-  }
-
-export default Users
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  
+  return (
+    <>
+      <h2>Users</h2>
+      {users.map(user => (
+        <ul key={user.id}>
+          <li>{user.name}</li>
+        </ul>
+      ))}
+    </>
+  )
+}

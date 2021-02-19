@@ -1,23 +1,39 @@
-The client will query a GraphQL API created from the JSONPlaceholder API. We are able to use the [`@rest` directive](https://stepzen.com/blog/how-to-connect-any-rest-backend) to easily translate the JSONPlaceholder API into a GraphQL schema.
+# StepZen React Tutorial
 
-![04-fetch-users-from-jsonplaceholder](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xw3dvkovbdbikjxrride.png)
+## Overview
+
+The client will query a GraphQL API created from the JSONPlaceholder API. We are able to use the [`@rest` directive](https://stepzen.com/blog/how-to-connect-any-rest-backend) to easily translate the API into a GraphQL schema.
+
+![05-unordered-list-of-users](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6667k39b37vmhz2xokwc.png)
 
 ## Project Setup
 
-Clone the repository and install dependencies.
+### Clone repository and install dependencies
 
 ```
 git clone https://github.com/stepzen-samples/stepzen-react-tutorial
 cd stepzen-react-tutorial && npm i
 ```
 
-Create a `.env.local` file for local environment variables.
+### Create `.env.local` file
 
 ```
 touch .env.local
 ```
 
-You will need to include your StepZen API key and API endpoint into `.env.local`.
+### Deploy API
+
+The `stepzen start` command uploads and deploys your API automatically.
+
+```bash
+stepzen start stepzen-react-tutorial/users
+```
+
+A browser window with a GraphiQL query editor can be used to query your new endpoint.
+
+![03-graphql-api-explorer](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mr9wywu4doovb3h8j162.png)
+
+This also deployed our API to `https://username.stepzen.net/stepzen-react-tutorial/users/__graphql`. Fill in your username and set the URL to the `REACT_APP_STEPZEN_ENDPOINT` environment variable. Include your StepZen API key for the `REACT_APP_STEPZEN_API_KEY` environment variable.
 
 ```
 REACT_APP_STEPZEN_API_KEY=YOUR_KEY_HERE
@@ -31,8 +47,6 @@ npm start
 ```
 
 ## GraphQL API
-
-### users.graphql
 
 The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we just have a single query called `getUsers` that returns an array of `User` objects. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
 
@@ -56,12 +70,14 @@ type UserBackend implements User {}
 
 type Query {
   getUsersBackend(unused: String!): [UserBackend]
-    @supplies(query:"getUsers")
-    @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
+    @supplies(
+      query:"getUsers"
+    )
+    @rest(
+      endpoint:"https://jsonplaceholder.typicode.com/users"
+    )
 }
 ```
-
-### index.graphql
 
 Our `schema` in `index.graphql` ties together all of our other schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive.
 
@@ -77,20 +93,6 @@ schema
   query: Query
 }
 ```
-
-### Deploy API
-
-The `stepzen start` command uploads and deploys your API automatically.
-
-```bash
-stepzen start stepzen-react-tutorial/users
-```
-
-A browser window with a GraphiQL query editor can be used to query your new endpoint.
-
-![03-graphql-api-explorer](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mr9wywu4doovb3h8j162.png)
-
-This also deployed our API to `https://username.stepzen.net/stepzen-react-tutorial/users/__graphql`. Fill in your username and set the URL to the `REACT_APP_STEPZEN_ENDPOINT` environment variable.
 
 ## Apollo Client
 
@@ -123,7 +125,7 @@ ReactDOM.render(
 );
 ```
 
-### GET_USERS_QUERY
+### Users
 
 ```javascript
 // src/Users.js
@@ -139,25 +141,22 @@ export const GET_USERS_QUERY = gql`
     }
   }
 `
-```
 
-### Users
-
-```javascript
-// src/Users.js
-
-const Users = () => {
-  const { data, loading } = useQuery(GET_USERS_QUERY)
+export default function Users() {
+  const { data, loading, error } = useQuery(GET_USERS_QUERY)
   const users = data?.getUsers
-
+  
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  
   return (
     <>
       <h2>Users</h2>
-      {loading ? (<div>Loading</div>) : (
-        <pre>
-          {JSON.stringify(users, null, "  ")}
-        </pre>
-      )}
+      {users.map(user => (
+        <ul key={user.id}>
+          <li>{user.name}</li>
+        </ul>
+      ))}
     </>
   )
 }
