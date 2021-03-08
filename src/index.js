@@ -1,27 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Users from "./Users";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "@apollo/react-hooks";
+import React from "react"
+import { render } from "react-dom"
+import { ApolloProvider } from "@apollo/react-hooks"
+import { client } from "./utils/client"
+import HomePage from "./pages/HomePage"
 
-const {
-  REACT_APP_STEPZEN_API_KEY,
-  REACT_APP_STEPZEN_ENDPOINT
-} = process.env;
-
-const client = new ApolloClient({
-  headers: {
-    Authorization: `Apikey ${REACT_APP_STEPZEN_API_KEY}`,
-  },
-  uri: REACT_APP_STEPZEN_ENDPOINT,
-});
-
-ReactDOM.render(
+render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <h1>StepZen React Tutorial</h1>
-      <Users />
+      <HomePage />
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
-);
+)
