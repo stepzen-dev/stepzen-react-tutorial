@@ -46,7 +46,9 @@ Start the development server on `localhost:3000`.
 npm start
 ```
 
-## GraphQL API
+## stepzen/schema
+
+### users.graphql
 
 The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we just have a single query called `getUsers` that returns an array of `User` objects. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
 
@@ -79,6 +81,8 @@ type Query {
 }
 ```
 
+### index.graphql
+
 Our `schema` in `index.graphql` ties together all of our other schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive.
 
 ```graphql
@@ -86,52 +90,112 @@ Our `schema` in `index.graphql` ties together all of our other schemas. For this
 
 schema
   @sdl(
-    files: [
-      "users.graphql"
-    ]
+    files: [ "users.graphql" ]
   ) {
   query: Query
 }
 ```
 
-## Apollo Client
+## React Frontend
+
+### index.js
 
 ```javascript
 // src/index.js
 
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "@apollo/react-hooks";
+import React from "react"
+import { render } from "react-dom"
+import { ApolloProvider } from "@apollo/react-hooks"
+import { client } from "./utils/client"
+import HomePage from "./pages/HomePage"
+
+render(
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <HomePage />
+    </ApolloProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
+)
+```
+
+### Apollo Client
+
+```javascript
+// src/utils/client.js
+
+import ApolloClient from "apollo-boost"
 
 const {
   REACT_APP_STEPZEN_API_KEY,
   REACT_APP_STEPZEN_ENDPOINT
-} = process.env;
+} = process.env
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   headers: {
     Authorization: `Apikey ${REACT_APP_STEPZEN_API_KEY}`,
   },
   uri: REACT_APP_STEPZEN_ENDPOINT,
-});
+})
+```
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
+### HomePage.js
+
+```javascript
+import Users from "../components/Users"
+
+export default function HomePage() {
+  return (
+    <>
       <h1>StepZen React Tutorial</h1>
       <Users />
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+    </>
+  )
+}
 ```
 
 ### Users
 
 ```javascript
-// src/Users.js
+// src/components/Users.js
 
 import { useQuery } from "@apollo/react-hooks"
-import { gql } from "apollo-boost"
+import { GET_USERS_QUERY } from "../queries/getUsers.js"
+
+export default function Users() {
+    const {
+      data,
+      loading,
+      error
+    } = useQuery(GET_USERS_QUERY)
+    
+  const users = data?.getUsers
+  
+  if (loading) return <p>Almost there...</p>
+  if (error) return <p>{error.message}</p>
+  
+  return (
+    <>
+      <h2>Users</h2>
+  
+      {users.map(user => (
+        <ul key={user.id}>
+          <li>
+            {user.name}
+          </li>
+        </ul>
+      ))}
+    </>
+  )
+}
+```
+
+### getUsers
+
+```javascript
+// src/queries/getUsers.js
+
+import { gql } from "graphql-tag"
 
 export const GET_USERS_QUERY = gql`
   query getUsers {
@@ -141,23 +205,4 @@ export const GET_USERS_QUERY = gql`
     }
   }
 `
-
-export default function Users() {
-  const { data, loading, error } = useQuery(GET_USERS_QUERY)
-  const users = data?.getUsers
-  
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  
-  return (
-    <>
-      <h2>Users</h2>
-      {users.map(user => (
-        <ul key={user.id}>
-          <li>{user.name}</li>
-        </ul>
-      ))}
-    </>
-  )
-}
 ```
