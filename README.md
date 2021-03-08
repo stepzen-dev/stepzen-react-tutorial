@@ -142,6 +142,8 @@ export const client = new ApolloClient({
 ### HomePage.js
 
 ```javascript
+// src/pages/HomePage.js
+
 import Users from "../components/Users"
 
 export default function HomePage() {
