@@ -9,7 +9,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "keywords": ["react", "apollo", "graphql"],
+  "keywords": [
+    "react",
+    "apollo",
+    "graphql"
+  ],
   "author": "Anthony Campolo",
   "license": "ISC",
   "dependencies": {
