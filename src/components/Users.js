@@ -8,7 +8,7 @@ export default function Users() {
       error
     } = useQuery(GET_USERS_QUERY)
     
-  const users = data?.getUsers
+  const users = data?.users
   
   if (loading) return <p>Almost there...</p>
   if (error) return <p>{error.message}</p>
@@ -20,7 +20,13 @@ export default function Users() {
       {users.map(user => (
         <ul key={user.id}>
           <li>
-            {user.name}
+            <h2>{user.name}</h2>
+            
+            <ul>
+              <li>{user.phone}</li>
+              <li>{user.email}</li>
+              <li>{user.website}</li>
+            </ul>
           </li>
         </ul>
       ))}
