@@ -50,7 +50,7 @@ npm start
 
 ### users.graphql
 
-The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we have `getUsers` that returns an array of `User` objects, and `getUserById` which returns a single `User` object. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
+The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`.
 
 ```graphql
 # stepzen/schema/users.graphql
@@ -65,18 +65,22 @@ interface User {
 }
 
 type UserBackend implements User {}
+```
+
+For our `Query` we have `users` that returns an array of `User` objects, and `user` which accepts an `id` argument and returns a single `User` object. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
+
+```graphql
+# stepzen/schema/users.graphql
 
 type Query {
-  getUsers: [User]
-
-  getUserById(id: ID!): User
-
-  getUsersBackend: [UserBackend]
-    @supplies(query:"getUsers")
+  users: [User]
+  usersBackend: [UserBackend]
+    @supplies(query:"users")
     @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
 
-  getUserByIdBackend(id: ID!): UserBackend
-    @supplies(query:"getUserById")
+  user(id: ID!): User
+  userBackend(id: ID!): UserBackend
+    @supplies(query:"user")
     @rest(endpoint:"https://jsonplaceholder.typicode.com/users/$id")
 }
 ```
@@ -86,11 +90,11 @@ type Query {
 Our `schema` in `index.graphql` ties together all of our other schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive.
 
 ```graphql
-# stepzen/schema/index.graphql
+# stepzen/index.graphql
 
 schema
   @sdl(
-    files: [ "users.graphql" ]
+    files: [ "schema/users.graphql" ]
   ) {
   query: Query
 }
@@ -171,7 +175,7 @@ export default function Users() {
       error
     } = useQuery(GET_USERS_QUERY)
     
-  const users = data?.getUsers
+  const users = data?.users
   
   if (loading) return <p>Almost there...</p>
   if (error) return <p>{error.message}</p>
@@ -183,7 +187,13 @@ export default function Users() {
       {users.map(user => (
         <ul key={user.id}>
           <li>
-            {user.name}
+            <h2>{user.name}</h2>
+            
+            <ul>
+              <li>{user.phone}</li>
+              <li>{user.email}</li>
+              <li>{user.website}</li>
+            </ul>
           </li>
         </ul>
       ))}
@@ -201,9 +211,12 @@ import gql from "graphql-tag"
 
 export const GET_USERS_QUERY = gql`
   query getUsers {
-    getUsers {
+    users {
       id
       name
+      email
+      phone
+      website
     }
   }
 `
