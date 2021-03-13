@@ -50,7 +50,7 @@ npm start
 
 ### users.graphql
 
-The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we just have a single query called `getUsers` that returns an array of `User` objects. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
+The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we have `getUsers` that returns an array of `User` objects, and `getUserById` which returns a single `User` object. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
 
 ```graphql
 # stepzen/schema/users.graphql
@@ -64,20 +64,20 @@ interface User {
   website: String!
 }
 
-type Query {
-  getUsers: [User]
-}
-
 type UserBackend implements User {}
 
 type Query {
+  getUsers: [User]
+
+  getUserById(id: ID!): User
+
   getUsersBackend: [UserBackend]
-    @supplies(
-      query:"getUsers"
-    )
-    @rest(
-      endpoint:"https://jsonplaceholder.typicode.com/users"
-    )
+    @supplies(query:"getUsers")
+    @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
+
+  getUserByIdBackend(id: ID!): UserBackend
+    @supplies(query:"getUserById")
+    @rest(endpoint:"https://jsonplaceholder.typicode.com/users/$id")
 }
 ```
 
