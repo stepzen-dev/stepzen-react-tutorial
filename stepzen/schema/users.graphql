@@ -10,15 +10,13 @@ interface User {
 type UserBackend implements User {}
 
 type Query {
-  getUsers: [User]
-
-  getUserById(id: ID!): User
-
-  getUsersBackend: [UserBackend]
-    @supplies(query:"getUsers")
+  users: [User]
+  usersBackend: [UserBackend]
+    @supplies(query:"users")
     @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
 
-  getUserByIdBackend(id: ID!): UserBackend
-    @supplies(query:"getUserById")
+  user(id: ID!): User
+  userBackend(id: ID!): UserBackend
+    @supplies(query:"user")
     @rest(endpoint:"https://jsonplaceholder.typicode.com/users/$id")
 }
