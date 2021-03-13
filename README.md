@@ -197,7 +197,7 @@ export default function Users() {
 ```javascript
 // src/queries/getUsers.js
 
-import { gql } from "graphql-tag"
+import gql from "graphql-tag"
 
 export const GET_USERS_QUERY = gql`
   query getUsers {
