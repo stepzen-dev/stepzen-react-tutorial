@@ -1,13 +1,10 @@
-import gql from "graphql-tag"
+import { gql } from "graphql-tag"
 
 export const GET_USERS_QUERY = gql`
   query getUsers {
-    users {
+    getUsers {
       id
       name
-      email
-      phone
-      website
     }
   }
 `

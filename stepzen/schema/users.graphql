@@ -1,4 +1,4 @@
-interface User {
+type User {
   id: ID!
   name: String!
   username: String!
@@ -7,16 +7,9 @@ interface User {
   website: String!
 }
 
-type UserBackend implements User {}
-
 type Query {
-  users: [User]
-  usersBackend: [UserBackend]
-    @supplies(query:"users")
-    @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
-
-  user(id: ID!): User
-  userBackend(id: ID!): UserBackend
-    @supplies(query:"user")
-    @rest(endpoint:"https://jsonplaceholder.typicode.com/users/$id")
+  getUsers: [User]
+    @rest(
+      endpoint:"https://jsonplaceholder.typicode.com/users"
+    )
 }
