@@ -29,7 +29,16 @@ The `stepzen start` command uploads and deploys your API automatically.
 stepzen start
 ```
 
-A browser window with a GraphiQL query editor can be used to query your new endpoint.
+A browser window with a GraphiQL query editor can be used to query your new endpoint on `localhost:5000`. Enter the following query to test your endpoint:
+
+```graphql
+query getUsers {
+  getUsers {
+    id
+    name
+  }
+}
+```
 
 ![03-graphql-api-explorer](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mr9wywu4doovb3h8j162.png)
 
@@ -46,48 +55,9 @@ Start the development server on `localhost:3000`.
 npm start
 ```
 
-## stepzen/schema
+### index.graphql defines all files making up the GraphQL schema
 
-### users.graphql
-
-The `User` interface includes an `id` for each `User` and information about the `User` such as their `name` and `email`.
-
-```graphql
-# stepzen/schema/users.graphql
-
-interface User {
-  id: ID!
-  name: String!
-  username: String!
-  email: String!
-  phone: String!
-  website: String!
-}
-
-type UserBackend implements User {}
-```
-
-For our `Query` we have `users` that returns an array of `User` objects, and `user` which accepts an `id` argument and returns a single `User` object. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
-
-```graphql
-# stepzen/schema/users.graphql
-
-type Query {
-  users: [User]
-  usersBackend: [UserBackend]
-    @supplies(query:"users")
-    @rest(endpoint:"https://jsonplaceholder.typicode.com/users")
-
-  user(id: ID!): User
-  userBackend(id: ID!): UserBackend
-    @supplies(query:"user")
-    @rest(endpoint:"https://jsonplaceholder.typicode.com/users/$id")
-}
-```
-
-### index.graphql
-
-Our `schema` in `index.graphql` ties together all of our other schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive.
+Every StepZen project requires an `index.graphql` that ties together all of our schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive. The `@sdl` directive is a StepZen directive that specifies the list of files to assemble.
 
 ```graphql
 # stepzen/index.graphql
@@ -100,11 +70,69 @@ schema
 }
 ```
 
-## React Frontend
+The `User` type includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we just have a single query called `getUsers` that returns an array of `User` objects. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
+
+```graphql
+# stepzen/schema/users.graphql
+
+type User {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  phone: String!
+  website: String!
+}
+
+type Query {
+  getUsers: [User]
+    @rest(
+      endpoint:"https://jsonplaceholder.typicode.com/users"
+    )
+}
+```
+
+### index.html
+
+```html
+<!-- public/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="theme-color"
+      content="#000000"
+    />
+    <meta
+      name="description"
+      content="How to use Apollo Client to Connect a React Frontend to a GraphQL API"
+    />
+
+    <title>React + StepZen App</title>
+  </head>
+  
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+    -->
+  </body>
+</html>
+```
 
 ### index.js
 
-```javascript
+```jsx
 // src/index.js
 
 import React from "react"
@@ -123,9 +151,9 @@ render(
 )
 ```
 
-### Apollo Client
+### client.js
 
-```javascript
+```jsx
 // src/utils/client.js
 
 import ApolloClient from "apollo-boost"
@@ -143,9 +171,10 @@ export const client = new ApolloClient({
 })
 ```
 
+
 ### HomePage.js
 
-```javascript
+```jsx
 // src/pages/HomePage.js
 
 import Users from "../components/Users"
@@ -160,22 +189,22 @@ export default function HomePage() {
 }
 ```
 
-### Users
+### Users.js
 
-```javascript
+```jsx
 // src/components/Users.js
 
 import { useQuery } from "@apollo/react-hooks"
 import { GET_USERS_QUERY } from "../queries/getUsers.js"
 
 export default function Users() {
-    const {
-      data,
-      loading,
-      error
-    } = useQuery(GET_USERS_QUERY)
-    
-  const users = data?.users
+  const {
+    data,
+    loading,
+    error
+  } = useQuery(GET_USERS_QUERY)
+
+  const users = data?.getUsers
   
   if (loading) return <p>Almost there...</p>
   if (error) return <p>{error.message}</p>
@@ -183,17 +212,11 @@ export default function Users() {
   return (
     <>
       <h2>Users</h2>
-  
+      
       {users.map(user => (
         <ul key={user.id}>
           <li>
-            <h2>{user.name}</h2>
-            
-            <ul>
-              <li>{user.phone}</li>
-              <li>{user.email}</li>
-              <li>{user.website}</li>
-            </ul>
+            {user.name}
           </li>
         </ul>
       ))}
@@ -202,22 +225,21 @@ export default function Users() {
 }
 ```
 
-### getUsers
+### getUsers.js
 
-```javascript
+```jsx
 // src/queries/getUsers.js
 
-import gql from "graphql-tag"
+import { gql } from "graphql-tag"
 
 export const GET_USERS_QUERY = gql`
   query getUsers {
-    users {
+    getUsers {
       id
       name
-      email
-      phone
-      website
     }
   }
 `
 ```
+
+![05-unordered-list-of-users](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6667k39b37vmhz2xokwc.png)
