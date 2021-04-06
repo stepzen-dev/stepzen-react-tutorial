@@ -26,7 +26,7 @@ touch .env.local
 The `stepzen start` command uploads and deploys your API automatically.
 
 ```bash
-stepzen start stepzen-react-tutorial/users
+stepzen start
 ```
 
 A browser window with a GraphiQL query editor can be used to query your new endpoint.
