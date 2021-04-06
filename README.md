@@ -15,10 +15,10 @@ git clone https://github.com/stepzen-samples/stepzen-react-tutorial
 cd stepzen-react-tutorial && npm i
 ```
 
-### Create `.env.local` file
+### Create `.env` file
 
 ```
-touch .env.local
+touch .env
 ```
 
 ### Deploy API
