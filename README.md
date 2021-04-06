@@ -40,7 +40,7 @@ query getUsers {
 }
 ```
 
-![03-graphql-api-explorer](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mr9wywu4doovb3h8j162.png)
+![03-graphql-api-explorer](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i7bbyjnbkgb05u1i6w75.png)
 
 This also deployed our API to `https://username.stepzen.net/stepzen-react-tutorial/users/__graphql`. Fill in your username and set the URL to the `REACT_APP_STEPZEN_ENDPOINT` environment variable. Include your StepZen API key for the `REACT_APP_STEPZEN_API_KEY` environment variable.
 
