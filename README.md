@@ -100,7 +100,7 @@ npm start
 ### Troubleshoot
 
 Environment variables are tricky, if you are having trouble getting your frontend to connect to your endpoint here are a few things you can double check:
-* Make sure you are following the correct [naming convention](https://create-react-app.dev/docs/adding-custom-environment-variables/)
+* Make sure you are following the correct [naming convention](https://create-react-app.dev/docs/adding-custom-environment-variables/) for the environment variables
 * Make sure you are setting the deployed endpoint and not the endpoint running on localhost
 * Make sure you are using your API key and not your Admin key
 
