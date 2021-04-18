@@ -95,6 +95,8 @@ Start the development server on `localhost:3000`.
 npm start
 ```
 
+![05-unordered-list-of-users](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6667k39b37vmhz2xokwc.png)
+
 ### Troubleshoot
 
 Environment variables are tricky, if you are having trouble getting your frontend to connect to your endpoint here are a few things you can double check:
@@ -253,5 +255,3 @@ export const GET_USERS_QUERY = gql`
   }
 `
 ```
-
-![05-unordered-list-of-users](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6667k39b37vmhz2xokwc.png)
