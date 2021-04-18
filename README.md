@@ -55,6 +55,15 @@ Start the development server on `localhost:3000`.
 npm start
 ```
 
+## Troubleshoot
+
+Environment variables are tricky, if you are having trouble getting your frontend to connect to your endpoint here are a few things you can double check:
+* Make sure you are following the correct [naming convention](https://create-react-app.dev/docs/adding-custom-environment-variables/)
+* Make sure you are setting the deployed endpoint and not the endpoint running on localhost
+* Make sure you are using your API key and not your Admin key
+
+When in doubt you can `console.log` lines 4-5 in `client.js` to see if your keys are being set correctly with the Apollo client.
+
 ### index.graphql defines all files making up the GraphQL schema
 
 Every StepZen project requires an `index.graphql` that ties together all of our schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive. The `@sdl` directive is a StepZen directive that specifies the list of files to assemble.
