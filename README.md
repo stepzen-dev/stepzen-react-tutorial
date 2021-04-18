@@ -12,7 +12,8 @@ The client will query a GraphQL API created from the JSONPlaceholder API. We are
 
 ```
 git clone https://github.com/stepzen-samples/stepzen-react-tutorial
-cd stepzen-react-tutorial && npm i
+cd stepzen-react-tutorial
+npm i
 ```
 
 ### Deploy API
