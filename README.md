@@ -82,7 +82,7 @@ type Query {
 touch .env
 ```
 
-This also deployed our API to `https://username.stepzen.net/stepzen-react-tutorial/users/__graphql`. Fill in your username and set the URL to the `REACT_APP_STEPZEN_ENDPOINT` environment variable. Include your StepZen API key for the `REACT_APP_STEPZEN_API_KEY` environment variable.
+`stepzen start` also deployed our API to `https://username.stepzen.net/stepzen-react/users/__graphql`. Fill in your username and set the URL to the `REACT_APP_STEPZEN_ENDPOINT` environment variable. Include your StepZen API key for the `REACT_APP_STEPZEN_API_KEY` environment variable.
 
 ```
 REACT_APP_STEPZEN_API_KEY=YOUR_KEY_HERE
