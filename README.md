@@ -103,6 +103,7 @@ Environment variables are tricky, if you are having trouble getting your fronten
 * Make sure you are following the correct [naming convention](https://create-react-app.dev/docs/adding-custom-environment-variables/) for the environment variables
 * Make sure you are setting the deployed endpoint and not the endpoint running on localhost
 * Make sure you are using your API key and not your Admin key
+* Make sure there aren't any extra [whitespace characters](https://en.wikipedia.org/wiki/Whitespace_character) between the variable names and the actual keys
 
 When in doubt you can `console.log` lines 4-5 in `client.js` to see if your keys are being set correctly with the Apollo client.
 
