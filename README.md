@@ -37,7 +37,7 @@ query getUsers {
 
 ![03-graphql-api-explorer](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i7bbyjnbkgb05u1i6w75.png)
 
-### index.graphql defines all files making up the GraphQL schema
+### `index.graphql` defines all files making up the GraphQL schema
 
 Every StepZen project requires an `index.graphql` that ties together all of our schemas. For this example we just have the `users.graphql` file included in our `@sdl` directive. The `@sdl` directive is a StepZen directive that specifies the list of files to assemble.
 
@@ -51,6 +51,8 @@ schema
   query: Query
 }
 ```
+
+### `users.graphql` defines `User` type and `getUsers` query
 
 The `User` type includes an `id` for each `User` and information about the `User` such as their `name` and `email`. For our `Query` we just have a single query called `getUsers` that returns an array of `User` objects. The `@rest` directive accepts the `endpoint` from JSONPlaceholder.
 
